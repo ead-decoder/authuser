@@ -5,7 +5,6 @@ import com.ead.authuser.models.UserModel;
 import com.ead.authuser.services.UserService;
 import com.ead.authuser.specifications.SpecificationTemplate;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,7 +49,9 @@ public class UserController {
         if (!userModelOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(userModelOptional.get());
+            UserModel user = userModelOptional.get();
+            user.add(linkTo(methodOn(UserController.class).getOneUser(user.getUserId())).withSelfRel());
+            return ResponseEntity.status(HttpStatus.OK).body(user);
         }
     }
 
@@ -81,6 +81,7 @@ public class UserController {
             userModel.setCpf(userDto.getCpf());
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
+            userModel.add(linkTo(methodOn(UserController.class).getOneUser(userModel.getUserId())).withSelfRel());
             return ResponseEntity.status(HttpStatus.OK).body(userModel);
         }
     }
@@ -117,6 +118,7 @@ public class UserController {
             userModel.setImageUrl(userDto.getImageUrl());
             userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
             userService.save(userModel);
+            userModel.add(linkTo(methodOn(UserController.class).getOneUser(userModel.getUserId())).withSelfRel());
             return ResponseEntity.status(HttpStatus.OK).body(userModel);
         }
     }
