@@ -6,6 +6,8 @@ import com.ead.authuser.enums.UserType;
 import com.ead.authuser.models.UserModel;
 import com.ead.authuser.services.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +25,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/auth")
 public class AuthenticationController {
+
+    Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
 
     @Autowired
     UserService userService;
@@ -46,6 +50,16 @@ public class AuthenticationController {
         userService.save(userModel);
         userModel.add(linkTo(methodOn(UserController.class).getOneUser(userModel.getUserId())).withSelfRel());
         return ResponseEntity.status(HttpStatus.CREATED).body(userModel);
+    }
+
+    @GetMapping("/")
+    public String index() {
+        logger.trace("TRACE"); // visualização mais granular, para rastreamentos
+        logger.debug("DEBUG"); // utilizado em ambientes de desenvolvimento, para apoiar no desenvolvimento, visualizar valores de variáveis...
+        logger.info("INFO"); // traz informações úteis e relevantes de fluxos que ocorreram
+        logger.warn("WARN"); // não são erros, é para apontar alertas
+        logger.error("ERROR"); // utilizado para apontar erros, populares em blocos catch
+        return "Logging Spring Boot...";
     }
 
 }
