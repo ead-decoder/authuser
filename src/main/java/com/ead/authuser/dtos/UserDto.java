@@ -23,7 +23,7 @@ public class UserDto {
         public static interface ImagePut{}
     }
 
-    private UUID uuid;
+    private UUID userId;
 
     @NotBlank(groups = UserView.RegistrationPost.class)
     @Size(min = 4, max = 50, groups = UserView.RegistrationPost.class)
