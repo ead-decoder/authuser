@@ -15,6 +15,10 @@ public class ResponsePageDto<T> extends PageImpl<T> {
         super(content, pageable, total);
     }
 
+    public ResponsePageDto(List<T> content) {
+        super(content);
+    }
+
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
     public ResponsePageDto(@JsonProperty("content") List<T> content,
                            @JsonProperty("number") int number,
@@ -28,6 +32,5 @@ public class ResponsePageDto<T> extends PageImpl<T> {
                            @JsonProperty("empty") boolean empty) {
         super(content, PageRequest.of(number, size), totalElements);
     }
-
 
 }
