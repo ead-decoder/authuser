@@ -53,8 +53,6 @@ public class UserCourseController {
         }
         UserCourseModel userCourseModel = userCourseService.save(userModelOptional.get().convertToUserCourseModel(userCourseDto.getCourseId()));
         return ResponseEntity.status(HttpStatus.CREATED).body(userCourseModel);
-
-
     }
 
 }
